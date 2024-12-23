@@ -5,18 +5,18 @@ package com.easy.bean;
  */
 public class BookCategory {
     private int categoryid;
-    private String categroyname;
+    private String categoryname;
 
 
 
     public String getCategroyname() {
 
-        return categroyname;
+        return categoryname;
     }
 
     public void setCategroyname(String categroyname) {
 
-        this.categroyname = categroyname;
+        this.categoryname = categroyname;
     }
 
     public int getCategoryid() {
