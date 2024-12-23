@@ -1,9 +1,9 @@
 package com.easy.util;
 
 public class Page {
-    private int page;
+    private int page = 1;
     private int start;
-    private int limit;
+    private int limit = 10;
 
     public int getPage() {
         return page;
@@ -14,7 +14,7 @@ public class Page {
     }
 
     public int getStart() {
-        return start;
+        return (page-1)*limit;
     }
 
     public void setStart(int start) {
@@ -22,7 +22,7 @@ public class Page {
     }
 
     public int getLimit() {
-        return (page-1)*limit;
+        return limit;
     }
 
     public void setLimit(int limit) {

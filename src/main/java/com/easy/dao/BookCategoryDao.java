@@ -45,7 +45,7 @@ public class BookCategoryDao {
         List<BookCategory> list=JdbcUtil.convertResultSetToList(rs, BookCategory.class);
         //关闭资源
         JdbcUtil.close(rs);
-        return list.get(0);
+        return list.get(1);
     }
 
     //查询数量
@@ -61,7 +61,7 @@ public class BookCategoryDao {
         }
         ResultSet rs = JdbcUtil.query(sql);
         rs.next();
-        int count = rs.getInt(0);
+        int count = rs.getInt(1);
         JdbcUtil.close(rs);
         return count;
     }

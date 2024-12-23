@@ -8,11 +8,14 @@ public class BookCategory {
     private String categroyname;
 
 
+
     public String getCategroyname() {
+
         return categroyname;
     }
 
     public void setCategroyname(String categroyname) {
+
         this.categroyname = categroyname;
     }
 
@@ -23,4 +26,5 @@ public class BookCategory {
     public void setCategoryid(int categoryid) {
         this.categoryid = categoryid;
     }
+
 }
