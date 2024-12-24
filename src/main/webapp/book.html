@@ -7,44 +7,104 @@
     <link rel="stylesheet" href="static/layui/css/layui.css">
 </head>
 <body>
-<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/department/list', page:true, id:'datalist'}" lay-filter="datalist">
+<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/book/list', page:true, id:'datalist'}" lay-filter="datalist">
     <thead>
     <tr>
-        <th lay-data="{field:'id', sort: true}">ID</th>
-        <th lay-data="{field:'code'}">编号</th>
-        <th lay-data="{field:'info', sort: true}">部门名称</th>
-        <th lay-data="{toolbar:'#linetools'}">操作</th>
+        <th lay-data="{field:'bookid'}">ID</th>
+        <th lay-data="{field:'booktitle'}">书名</th>
+        <th lay-data="{field:'author'}">作者</th>
+        <th lay-data="{field:'publisheddate'}">发布时间</th>
+        <th lay-data="{field:'pages'}">页数</th>
+        <th lay-data="{field:'price'}">价格</th>
+        <th lay-data="{field:'categoryid'}">分类</th>
     </tr>
     </thead>
 </table>
 <!--新增窗口组件-->
 <div id="addWin" lay-filter="addWin" class="layui-form" style="display: none">
     <div class="layui-form-item">
-        <label class="layui-form-label">部门编号</label>
+        <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-            <input type="text" name="code" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
+            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">部门名称</label>
+        <label class="layui-form-label">书名</label>
         <div class="layui-input-block">
-            <input type="text" name="info"  placeholder="请输入部门名称" autocomplete="off" class="layui-input">
+            <input type="text" name="booktitle"  placeholder="请输入图书名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input type="text" name="author"  placeholder="请输入图书作者" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">发布时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="publisheddate"  placeholder="请输入图书发布时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">页数</label>
+        <div class="layui-input-block">
+            <input type="text" name="pages"  placeholder="请输入图书页数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="price"  placeholder="请输入图书价格" autocomplete="off" class="layui-input">
         </div>
     </div>
 </div>
 <!--编辑窗口组件-->
 <div id="editWin" lay-filter="editWin" class="layui-form" style="display: none">
-   <input type="hidden" name="id" >
+   <input type="hidden" name="bookid" >
     <div class="layui-form-item">
-        <label class="layui-form-label">部门编号</label>
+
+        <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-            <input type="text" name="code" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
+            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">部门名称</label>
+        <label class="layui-form-label">书名</label>
         <div class="layui-input-block">
-            <input type="text" name="info"  placeholder="请输入部门名称" autocomplete="off" class="layui-input">
+            <input type="text" name="booktitle"  placeholder="请输入图书名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input type="text" name="author"  placeholder="请输入图书作者" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">发布时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="publisheddate"  placeholder="请输入图书发布时间" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">页数</label>
+        <div class="layui-input-block">
+            <input type="text" name="pages"  placeholder="请输入图书页数" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="price"  placeholder="请输入图书价格" autocomplete="off" class="layui-input">
         </div>
     </div>
 </div>
@@ -74,11 +134,11 @@
         var event=obj.event;
         if(event=='add'){
             //点击新增按钮执行的方法
-            form.val("addWin",{code:"",info:""});
+            form.val("addWin",{booktitle:'',author:'',publisheddate:'',categoryid:'',pages:'',price:''});
             //打开一个对话框(输入内容)
             layer.open({
                 type:1,
-                title:"新增部门",
+                title:"新增图书",
                 area:['400px','260px'],
                 content:$("#addWin"),
                 btn:["保存"],
@@ -88,7 +148,7 @@
                     var formdata=form.val("addWin");
                     $.ajax({
                         method:'post',
-                        url:'department/add',
+                        url:'book/add',
                         data:formdata,
                         success:function(result){
                             //关闭对话框
@@ -116,7 +176,7 @@
             //打开对话框
             layer.open({
                 type:1,
-                title:'编辑部门',
+                title:'编辑图书',
                 area:['300px','260px'],
                 content:$("#editWin"),
                 btn:["保存"],
@@ -126,7 +186,7 @@
                     //提交数据
                     $.ajax({
                         method:"post",
-                        url:"department/edit",
+                        url:"book/edit",
                         data:formdata,
                         success:function(result){
                             //刷新表格
@@ -146,7 +206,7 @@
             layer.confirm("确认要删除该行数据吗?",function(){
                 //点击确认后执行的代码
                 $.ajax({
-                    url:"department/delete",
+                    url:"book/delete",
                     data:data,
                     success:function (){
                         layer.closeAll();
