@@ -42,12 +42,12 @@ public class BookDao {
         if(checktext!=null)
         {
             sql = sql+" where booktitle like ?";
-            ResultSet rs = JdbcUtil.query(sql,checktext);
+            ResultSet rs = JdbcUtil.query(sql,"%"+checktext+"%");
             rs.next();
             int result = rs.getInt(1);
             return result;
         }
-        ResultSet rs = JdbcUtil.query(sql,checktext);
+        ResultSet rs = JdbcUtil.query(sql);
         rs.next();
         int result = rs.getInt(1);
         return result;
@@ -55,7 +55,7 @@ public class BookDao {
 
     public int add(Book book){
 
-        String sql = "insert into book (booktitle,author,publisheddate,categoryid,pages,price) value(?,?,?,?,?,?)";
+        String sql = "insert into book (booktitle,author,publisheddate,categoryid,pages,price) values(?,?,?,?,?,?)";
         int result = JdbcUtil.update(sql,book.getBooktitle(),book.getAuthor(),book.getPublisheddate(),book.getCategoryid(),book.getPages(),book.getPrice());
         return result;
     }
