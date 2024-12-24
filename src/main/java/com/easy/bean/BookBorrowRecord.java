@@ -3,7 +3,7 @@ package com.easy.bean;
 import java.util.Date;
 
 public class BookBorrowRecord {
-    private int recordid ;
+    private int recordid;
     private int bookid;
     private int userid;
     private int adminid;

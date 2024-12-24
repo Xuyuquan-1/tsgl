@@ -4,14 +4,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Book {
-
     private int bookid;
     private String booktitle;
     private String author;
     private Date publisheddate;
     private int categoryid;
     private int pages;
-    private BigDecimal price;
+    private double price;
 
     public int getBookid() {
         return bookid;
@@ -41,8 +40,8 @@ public class Book {
         return publisheddate;
     }
 
-    public void setPublisheddate(Date publisheddate) {
-        this.publisheddate = publisheddate;
+    public void setPublisheddate(Date publishddate) {
+        this.publisheddate = publishddate;
     }
 
     public int getCategoryid() {
@@ -61,11 +60,11 @@ public class Book {
         this.pages = pages;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

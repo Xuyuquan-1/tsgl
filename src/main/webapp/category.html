@@ -7,44 +7,33 @@
     <link rel="stylesheet" href="static/layui/css/layui.css">
 </head>
 <body>
-<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/department/list', page:true, id:'datalist'}" lay-filter="datalist">
+<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/category/list', page:true, id:'datalist'}" lay-filter="datalist">
     <thead>
     <tr>
-        <th lay-data="{field:'id', sort: true}">ID</th>
-        <th lay-data="{field:'code'}">编号</th>
-        <th lay-data="{field:'info', sort: true}">部门名称</th>
+        <th lay-data="{field:'categoryid', sort: true}">ID</th>
+        <th lay-data="{field:'categoryname', sort: true}">分类名称</th>
         <th lay-data="{toolbar:'#linetools'}">操作</th>
     </tr>
     </thead>
 </table>
 <!--新增窗口组件-->
 <div id="addWin" lay-filter="addWin" class="layui-form" style="display: none">
+
     <div class="layui-form-item">
-        <label class="layui-form-label">部门编号</label>
+        <label class="layui-form-label">分类名称</label>
         <div class="layui-input-block">
-            <input type="text" name="code" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">部门名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="info"  placeholder="请输入部门名称" autocomplete="off" class="layui-input">
+            <input type="text" name="categoryname"  placeholder="请输入分类名称" autocomplete="off" class="layui-input">
         </div>
     </div>
 </div>
 <!--编辑窗口组件-->
 <div id="editWin" lay-filter="editWin" class="layui-form" style="display: none">
-   <input type="hidden" name="id" >
+   <input type="hidden" name="categoryid" >
+
     <div class="layui-form-item">
-        <label class="layui-form-label">部门编号</label>
+        <label class="layui-form-label">分类名称</label>
         <div class="layui-input-block">
-            <input type="text" name="code" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">部门名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="info"  placeholder="请输入部门名称" autocomplete="off" class="layui-input">
+            <input type="text" name="categoryname"  placeholder="请输入分类名称" autocomplete="off" class="layui-input">
         </div>
     </div>
 </div>
@@ -74,11 +63,13 @@
         var event=obj.event;
         if(event=='add'){
             //点击新增按钮执行的方法
-            form.val("addWin",{code:"",info:""});
+            //重置表单内容
+            form.val("addWin",{categoryname:""});
             //打开一个对话框(输入内容)
             layer.open({
+            //具有遮罩层样式的窗口
                 type:1,
-                title:"新增部门",
+                title:"新增分类",
                 area:['400px','260px'],
                 content:$("#addWin"),
                 btn:["保存"],
@@ -88,7 +79,7 @@
                     var formdata=form.val("addWin");
                     $.ajax({
                         method:'post',
-                        url:'department/add',
+                        url:'category/add',
                         data:formdata,
                         success:function(result){
                             //关闭对话框
@@ -116,7 +107,7 @@
             //打开对话框
             layer.open({
                 type:1,
-                title:'编辑部门',
+                title:'编辑分类',
                 area:['300px','260px'],
                 content:$("#editWin"),
                 btn:["保存"],
@@ -126,7 +117,7 @@
                     //提交数据
                     $.ajax({
                         method:"post",
-                        url:"department/edit",
+                        url:"category/edit",
                         data:formdata,
                         success:function(result){
                             //刷新表格
@@ -146,7 +137,7 @@
             layer.confirm("确认要删除该行数据吗?",function(){
                 //点击确认后执行的代码
                 $.ajax({
-                    url:"department/delete",
+                    url:"category/delete",
                     data:data,
                     success:function (){
                         layer.closeAll();

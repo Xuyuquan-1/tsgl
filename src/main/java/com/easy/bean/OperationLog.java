@@ -3,9 +3,9 @@ package com.easy.bean;
 import java.util.Date;
 
 public class OperationLog {
-    private int  logid ;
-    private int userid ;
-    private String operation ;
+    private int logid;
+    private int userid;
+    private String operation;
     private Date operationtime;
 
     public int getLogid() {

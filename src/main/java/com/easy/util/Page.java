@@ -1,9 +1,9 @@
 package com.easy.util;
 
 public class Page {
-    private int page = 1;
+    private int page=1;
     private int start;
-    private int limit = 10;
+    private int limit=10;
 
     public int getPage() {
         return page;

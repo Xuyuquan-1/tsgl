@@ -3,13 +3,9 @@ package com.easy.util;
 import java.util.List;
 
 public class RestResult {
-
     private int code=0;
-
-    private  String msg="";
-
+    private String msg="";
     private int count;
-
     private List data;
 
     public RestResult(int count, List data) {
@@ -49,3 +45,4 @@ public class RestResult {
         this.data = data;
     }
 }
+

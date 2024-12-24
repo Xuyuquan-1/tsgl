@@ -63,7 +63,7 @@ public class JdbcUtil {
             throw new RuntimeException("Error executing query", e);
         } finally {
 
-           // close(conn, stmt, rs);
+            // close(conn, stmt, rs);
         }
     }
 

@@ -25,29 +25,25 @@ public class BookCategoryController {
 
     @RequestMapping("list")
     public RestResult getList(Page page,String checktext) throws SQLException, IllegalAccessException, InstantiationException {
-        List list = dao.getList(page,checktext);
-        int count = dao.getCount(checktext);
-        RestResult result = new RestResult(count,list);
+        List list=dao.getList(page,checktext);
+        int count=dao.getCount(checktext);
+        RestResult result=new RestResult(count,list);
         return result;
-
     }
 
     @RequestMapping("add")
     public int add(BookCategory bookCategory){
-        int result = dao.add(bookCategory);
+        int result=dao.add(bookCategory);
         return result;
     }
-
     @RequestMapping("edit")
     public int edit(BookCategory bookCategory){
-        int result = dao.edit(bookCategory);
+        int result=dao.edit(bookCategory);
         return result;
     }
-
     @RequestMapping("delete")
     public int delete(BookCategory bookCategory){
-        int result = dao.delete(bookCategory);
+        int result=dao.delete(bookCategory);
         return result;
     }
-
 }
