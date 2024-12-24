@@ -18,7 +18,6 @@
 </table>
 <!--新增窗口组件-->
 <div id="addWin" lay-filter="addWin" class="layui-form" style="display: none">
-
     <div class="layui-form-item">
         <label class="layui-form-label">分类名称</label>
         <div class="layui-input-block">
@@ -29,7 +28,6 @@
 <!--编辑窗口组件-->
 <div id="editWin" lay-filter="editWin" class="layui-form" style="display: none">
    <input type="hidden" name="categoryid" >
-
     <div class="layui-form-item">
         <label class="layui-form-label">分类名称</label>
         <div class="layui-input-block">
@@ -69,7 +67,7 @@
             layer.open({
             //具有遮罩层样式的窗口
                 type:1,
-                title:"新增分类",
+                title:"新增部门",
                 area:['400px','260px'],
                 content:$("#addWin"),
                 btn:["保存"],

@@ -1,6 +1,5 @@
 package com.easy.bean;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Book {
@@ -11,6 +10,17 @@ public class Book {
     private int categoryid;
     private int pages;
     private double price;
+
+    //存储分类信息
+    private BookCategory category;
+
+    public BookCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(BookCategory category) {
+        this.category = category;
+    }
 
     public int getBookid() {
         return bookid;

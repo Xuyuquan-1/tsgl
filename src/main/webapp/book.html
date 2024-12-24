@@ -10,13 +10,15 @@
 <table class="layui-table" lay-data="{toolbar:'#toptools', url:'/book/list', page:true, id:'datalist'}" lay-filter="datalist">
     <thead>
     <tr>
-        <th lay-data="{field:'bookid'}">ID</th>
+        <th lay-data="{field:'bookid', sort: true}">ID</th>
         <th lay-data="{field:'booktitle'}">书名</th>
         <th lay-data="{field:'author'}">作者</th>
         <th lay-data="{field:'publisheddate'}">发布时间</th>
         <th lay-data="{field:'pages'}">页数</th>
         <th lay-data="{field:'price'}">价格</th>
-        <th lay-data="{field:'categoryid'}">分类</th>
+        <th lay-data="{templet:function(d){return d.category.categoryname}}">分类</th>
+
+        <th lay-data="{toolbar:'#linetools'}">操作</th>
     </tr>
     </thead>
 </table>
@@ -25,7 +27,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
+<!--            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">-->
+        <select name = "categoryid"></select>
         </div>
     </div>
     <div class="layui-form-item">
@@ -34,28 +37,24 @@
             <input type="text" name="booktitle"  placeholder="请输入图书名称" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">作者</label>
         <div class="layui-input-block">
             <input type="text" name="author"  placeholder="请输入图书作者" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">发布时间</label>
         <div class="layui-input-block">
-            <input type="text" name="publisheddate"  placeholder="请输入图书发布时间" autocomplete="off" class="layui-input">
+            <input type="text" name="publisheddate"  placeholder="请输入发布时间" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">页数</label>
         <div class="layui-input-block">
             <input type="text" name="pages"  placeholder="请输入图书页数" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-block">
@@ -67,10 +66,10 @@
 <div id="editWin" lay-filter="editWin" class="layui-form" style="display: none">
    <input type="hidden" name="bookid" >
     <div class="layui-form-item">
-
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">
+<!--            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">-->
+            <select name = "categoryid"></select>
         </div>
     </div>
     <div class="layui-form-item">
@@ -79,28 +78,24 @@
             <input type="text" name="booktitle"  placeholder="请输入图书名称" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">作者</label>
         <div class="layui-input-block">
             <input type="text" name="author"  placeholder="请输入图书作者" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">发布时间</label>
         <div class="layui-input-block">
-            <input type="text" name="publisheddate"  placeholder="请输入图书发布时间" autocomplete="off" class="layui-input">
+            <input type="text" name="publisheddate"  placeholder="请输入发布时间" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">页数</label>
         <div class="layui-input-block">
             <input type="text" name="pages"  placeholder="请输入图书页数" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-block">
@@ -129,6 +124,20 @@
     const layer=layui.layer;
     const form=layui.form;
 
+    //查询数据库中分类的信息  将分类信息转换成下拉框选项 设置到两个下拉框中
+    $.ajax({
+        url:'category/list',
+        async:false,
+        success:function(result){
+            var data = result.data;
+            for(var index in data){
+            $("select[name='categoryid']").append(
+                "<option value='"+data[index].categoryid+"'>"+data[index].categoryname+"</option>"
+                );
+            }
+        }
+    });
+
     /*声明表格头部工具栏时间*/
     table.on("toolbar(datalist)",function(obj){
         var event=obj.event;
@@ -139,7 +148,7 @@
             layer.open({
                 type:1,
                 title:"新增图书",
-                area:['400px','260px'],
+                area:['400px','480px'],
                 content:$("#addWin"),
                 btn:["保存"],
                 btn1:function(){
@@ -177,7 +186,7 @@
             layer.open({
                 type:1,
                 title:'编辑图书',
-                area:['300px','260px'],
+                area:['400px','470px'],
                 content:$("#editWin"),
                 btn:["保存"],
                 btn1:function(){
@@ -207,7 +216,7 @@
                 //点击确认后执行的代码
                 $.ajax({
                     url:"book/delete",
-                    data:data,
+                    data:{bookid:data.bookid},
                     success:function (){
                         layer.closeAll();
                         table.reload("datalist");

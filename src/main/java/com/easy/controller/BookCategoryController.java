@@ -1,6 +1,5 @@
 package com.easy.controller;
 
-import com.easy.bean.Book;
 import com.easy.bean.BookCategory;
 import com.easy.dao.BookCategoryDao;
 import com.easy.util.Page;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
