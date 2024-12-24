@@ -1,11 +1,14 @@
 package com.easy.bean;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Book {
     private int bookid;
     private String booktitle;
     private String author;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date publisheddate;
     private int categoryid;
     private int pages;

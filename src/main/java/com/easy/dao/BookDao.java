@@ -4,7 +4,6 @@ import com.easy.bean.Book;
 import com.easy.util.JdbcUtil;
 import com.easy.util.Page;
 import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
