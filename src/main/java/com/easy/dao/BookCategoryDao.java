@@ -20,7 +20,7 @@ public class BookCategoryDao {
         List params=new ArrayList();
         if(checktext!=null){
             sql=sql+" where categoryname like ?";
-            params.add("%"+checktext+"%");
+            params.add("%" +checktext+"%");
         }
         if(page!=null){
             sql=sql+" limit ?,?";

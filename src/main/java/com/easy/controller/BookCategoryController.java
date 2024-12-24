@@ -25,7 +25,7 @@ public class BookCategoryController {
     public RestResult getList(Page page,String checktext) throws SQLException, IllegalAccessException, InstantiationException {
         List list=dao.getList(page,checktext);
         int count=dao.getCount(checktext);
-        RestResult result=new RestResult(count,list);
+        RestResult result= new RestResult(count,list);
         return result;
     }
 
