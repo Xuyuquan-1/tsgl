@@ -16,39 +16,40 @@
         <th lay-data="{field:'publisheddate'}">发布时间</th>
         <th lay-data="{field:'pages'}">页数</th>
         <th lay-data="{field:'price'}">价格</th>
-        <th lay-data="{templet:function(d){return d.category.categoryname}}">分类</th>
+        <th lay-data="{templet:function(d){ return d.category.categoryname}}">分类</th>
 
         <th lay-data="{toolbar:'#linetools'}">操作</th>
     </tr>
     </thead>
 </table>
-<!--借阅图书窗口组件-->
+
+
 <div id="borrowWin" lay-filter="borrowWin" class="layui-form" style="display: none">
     <input type="hidden" name="bookid">
     <div class="layui-form-item">
         <label class="layui-form-label">书名</label>
         <div class="layui-input-block">
-            <input type="text" name="booktitle" readonly placeholder="请输入图书名称" autocomplete="off" class="layui-input">
+            <input type="text" name="booktitle"  placeholder="请输入图书名称" autocomplete="off" class="layui-input">
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">借阅人</label>
         <div class="layui-input-block">
             <select name="userid" lay-verify="required" lay-search="">
                 <option value="">直接选择或搜索选择</option>
-
             </select>
         </div>
     </div>
 </div>
+
+
 <!--新增窗口组件-->
 <div id="addWin" lay-filter="addWin" class="layui-form" style="display: none">
     <div class="layui-form-item">
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
-<!--            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">-->
-        <select name = "categoryid"></select>
+<!--            下拉框-->
+            <select name="categoryid"></select>
         </div>
     </div>
     <div class="layui-form-item">
@@ -89,7 +90,8 @@
         <label class="layui-form-label">分类</label>
         <div class="layui-input-block">
 <!--            <input type="text" name="categoryid" placeholder="请输入部门编号" autocomplete="off" class="layui-input">-->
-            <select name = "categoryid"></select>
+<!--            下拉框-->
+            <select name="categoryid"></select>
         </div>
     </div>
     <div class="layui-form-item">
@@ -136,8 +138,8 @@
                     lay-event="add">新增</button>
         </div>
     </div>
-
 </script>
+
 <!--表格行内工具栏-->
 <script type="text/html" id="linetools">
     <button type="button" class="layui-btn layui-btn-xs layui-bg-orange"
@@ -146,7 +148,6 @@
             lay-event="edit">编辑</button>
     <button type="button" class="layui-btn layui-btn-xs layui-bg-red"
             lay-event="delete">删除</button>
-
 </script>
 
 <script src="static/layui/layui.all.js"></script>
@@ -157,63 +158,60 @@
     const layer=layui.layer;
     const form=layui.form;
 
-    //
+    //如果没有登录，直接跳转到login.html
     $.ajax({
         url:"login/islogin",
         async:false,
         success:function(result){
             if(!result){
-                top.location.href="login.html";
+                top.location.href="login.html"
             }
         }
     });
 
-    //查询数据库中分类的信息  将分类信息转换成下拉框选项 设置到两个下拉框中
+
+    //查询数据库中分类的信息  将分类的信息转换成下拉框选项   设置到两个下拉框中
     $.ajax({
         url:'category/list',
         async:false,
         success:function(result){
-            var data = result.data;
+            var data=result.data;
             for(var index in data){
-            $("select[name='categoryid']").append(
+                $("select[name='categoryid']").append(
                 "<option value='"+data[index].categoryid+"'>"+data[index].categoryname+"</option>"
                 );
             }
         }
     });
 
-    $.ajax({
-        url:'user/list',
-        async:false,
-        success:function(result){
-            var data = result.data;
-            for(var index in data){
-                $("select[name='userid']").append(
-                    "<option value='"+data[index].userid+"'>" +"data[index].name+"</option>"
-                );
-
-            }
+$.ajax({
+    url: 'user/list',
+    success: function(result) {
+        var data = result.data;
+        for (var user of data) {
+            $("select[name='userid']").append(
+                `<option value="${user.userid}">${user.name}</option>`
+            );
         }
-    })
+    }
+});
 
-    /*声明表格头部工具栏事件*/
+    /*声明表格头部工具栏时间*/
     table.on("toolbar(datalist)",function(obj){
         var event=obj.event;
         if(event=='check'){
-            //点击查询按钮执行的方法
+            //点击查询
             var checktext=$("[name='checktext']").val();
             table.reload("datalist",{where:{checktext:checktext}});
-            //回写
             $("[name='checktext']").val(checktext);
-        }
-        else if(event=='add'){
+        }else if(event=='add'){
             //点击新增按钮执行的方法
             form.val("addWin",{booktitle:'',author:'',publisheddate:'',categoryid:'',pages:'',price:''});
             //打开一个对话框(输入内容)
             layer.open({
                 type:1,
                 title:"新增图书",
-                area:['400px','480px'],
+                area:['480px','500px'],
                 content:$("#addWin"),
                 btn:["保存"],
                 btn1:function(){
@@ -245,31 +243,27 @@
         var event=obj.event;
         var data=obj.data;//点击按钮所在行的数据
         if(event=='borrow'){
-            //点击借阅按钮执行的方法
-            form.val("borrowWin",data);
+          form.val("borrowWin",data);
             layer.open({
                 type:1,
-                title:"借阅"，
+                title:'借阅',
                 area:['400px','470px'],
                 content:$("#borrowWin"),
                 btn:["保存"],
                 btn1:function(){
-                    var formdata = form.val("borrowWin");
-                    $.agax({
-                        url:"borrow/borrow",
-                        data:formdata,
-                        success:function(){
-                            //关闭窗口
-                            layer.closeAll();
-                            //提示用户
-                            layer.msg("借阅成功",{icon:1,time:1800});
-                        }
-                    });
-                }
-            });
-        }
-        else
-        if(event=='edit'){
+                    var formdata=form.val("borrow");
+                    $.ajax({
+                    url:"borrow/borrow",
+                    data:formdata,
+                    success:function(){
+                    layer.closeAll();
+                    //提示用户
+                    layer.msg("保存成功",{icon:1,time:1800});
+                    }
+                });
+            }
+        });
+        }else if(event=='edit'){
             //点击编辑按钮执行的方法
             form.val("editWin",data);//显示原始数据
             //打开对话框

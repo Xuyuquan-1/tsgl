@@ -1,10 +1,6 @@
 package com.easy.controller;
 
-import com.easy.bean.Book;
-import com.easy.bean.BookCategory;
 import com.easy.bean.User;
-import com.easy.dao.BookCategoryDao;
-import com.easy.dao.BookDao;
 import com.easy.dao.UserDao;
 import com.easy.util.Page;
 import com.easy.util.RestResult;

@@ -25,10 +25,10 @@ public class BookController {
     @RequestMapping("list")
     public RestResult getList(Page page,String checktext) throws SQLException, IllegalAccessException, InstantiationException {
         List<Book> list=bookDao.getList(page,checktext);
-        //将分类id取出通过id查询分类对象将分类的对象设置到图书对象中
+        //流程：将分类id取出，通过id查询分类对象，将分类对象设置到图书对象当中
         for(Book item:list){
             int categoryid=item.getCategoryid();
-            BookCategory category=categoryDao.getCategoryById(categoryid);
+            BookCategory category = categoryDao.getCategoryById(categoryid);
             item.setCategory(category);
         }
         int count=bookDao.getCount(checktext);

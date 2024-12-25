@@ -3,6 +3,7 @@ package com.easy.bean;
 import java.util.Date;
 
 public class BookBorrowRecord {
+
     private int recordid;
     private int bookid;
     private int userid;
@@ -10,6 +11,34 @@ public class BookBorrowRecord {
     private Date borrowdate;
     private Date returndate;
     private String status;
+
+    private Book book;
+    private User user;
+    private Admin admin;
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
 
     public int getRecordid() {
         return recordid;

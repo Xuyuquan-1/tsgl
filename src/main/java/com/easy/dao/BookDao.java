@@ -4,6 +4,7 @@ import com.easy.bean.Book;
 import com.easy.util.JdbcUtil;
 import com.easy.util.Page;
 import org.springframework.stereotype.Repository;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,6 +12,16 @@ import java.util.List;
 
 @Repository
 public class BookDao {
+
+    public Book getBookBybookId(int bookid) throws SQLException, IllegalAccessException, InstantiationException {
+        String sql = "select * from book where bookid=?";
+        ResultSet rs = JdbcUtil.query(sql, bookid);
+        List<Book> list=JdbcUtil.convertResultSetToList(rs,Book.class);
+        Book result=list.get(0);
+        JdbcUtil.close(rs);
+        return result;
+    }
+
     public List<Book> getList(Page page,String checktext) throws SQLException, IllegalAccessException, InstantiationException {
         String sql="select * from book ";
         List params=new ArrayList();
@@ -45,6 +56,7 @@ public class BookDao {
         ResultSet rs=JdbcUtil.query(sql);
         rs.next();
         int result = rs.getInt(1);
+        JdbcUtil.close(rs);
         return result;
     }
 

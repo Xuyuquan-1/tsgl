@@ -20,7 +20,7 @@ public class BookCategoryDao {
         List params=new ArrayList();
         if(checktext!=null){
             sql=sql+" where categoryname like ?";
-            params.add("%" +checktext+"%");
+            params.add("%"+checktext+"%");
         }
         if(page!=null){
             sql=sql+" limit ?,?";
@@ -34,7 +34,7 @@ public class BookCategoryDao {
     }
     //2.查询一条数据
     public BookCategory getCategoryById(int categoryid) throws SQLException, IllegalAccessException, InstantiationException {
-        String sql="select * from bookcategory where categoryid = ? ";
+        String sql="select * from bookcategory where categoryid=?";
         ResultSet rs=JdbcUtil.query(sql,categoryid);
         //将ResultSet转成bookcategory类的对象
         List<BookCategory> list = JdbcUtil.convertResultSetToList(rs, BookCategory.class);

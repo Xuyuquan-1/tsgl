@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:color="http://www.w3.org/1999/xhtml">
 <head>
     <base href="http://localhost:8080/">
     <meta charset="UTF-8">
@@ -7,12 +7,15 @@
     <link rel="stylesheet" href="static/layui/css/layui.css">
 </head>
 <body>
-<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/department/list', page:true, id:'datalist'}" lay-filter="datalist">
+<table class="layui-table" lay-data="{toolbar:'#toptools', url:'/borrow/list', page:true, id:'datalist'}" lay-filter="datalist">
     <thead>
     <tr>
-        <th lay-data="{field:'id', sort: true}">ID</th>
-        <th lay-data="{field:'code'}">编号</th>
-        <th lay-data="{field:'info', sort: true}">部门名称</th>
+        <th lay-data="{field:'recordid'}">ID</th>
+        <th lay-data="{templet:function(d){return d.name}}">用户名</th>
+        <th lay-data="{templet:function(d){return d.book.booktitle}}">书名</th>
+        <th lay-data="{templet:function(d){return d.admin.adminname}}">管理员</th>
+        <th lay-data="{field:'borrowdate'}">借阅时间</th>
+        <th lay-data="{templet:function(d){if(!d.returndate){return '<span style=\'color:red\'>未归还</span>'}else{return d.returndate}}}">归还时间</th>
         <th lay-data="{toolbar:'#linetools'}">操作</th>
     </tr>
     </thead>
@@ -50,15 +53,26 @@
 </div>
 <!--表格头部工具栏-->
 <script type="text/html" id="toptools">
-    <button type="button" class="layui-btn layui-btn-sm"
-            lay-event="add">新增</button>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="text" name="name" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="booktitle" placeholder="请输入书名" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn"
+                    lay-event="check">查询</button>
+        </div>
+    </div>
 </script>
+
 <!--表格行内工具栏-->
 <script type="text/html" id="linetools">
+    {{#   if(!d.returndate){   }}
     <button type="button" class="layui-btn layui-btn-xs layui-bg-orange"
-            lay-event="edit">编辑</button>
-    <button type="button" class="layui-btn layui-btn-xs layui-bg-red"
-            lay-event="delete">删除</button>
+            lay-event="returned">还书</button>
+    {{#  }   }}
 </script>
 
 <script src="static/layui/layui.all.js"></script>
@@ -69,50 +83,26 @@
     const layer=layui.layer;
     const form=layui.form;
 
+    //如果没有登录，直接跳转到login.html
     $.ajax({
         url:"login/islogin",
         async:false,
         success:function(result){
             if(!result){
-                top.location.href="login.html";
+                top.location.href="login.html"
             }
         }
     });
 
-    /*声明表格头部工具栏时间*/
+    /*声明表格头部工具栏事件*/
     table.on("toolbar(datalist)",function(obj){
         var event=obj.event;
-        if(event=='add'){
-            //点击新增按钮执行的方法
-            form.val("addWin",{code:"",info:""});
-            //打开一个对话框(输入内容)
-            layer.open({
-                type:1,
-                title:"新增部门",
-                area:['400px','260px'],
-                content:$("#addWin"),
-                btn:["保存"],
-                btn1:function(){
-                    //点击保存按钮  保存数据
-                    //表单中的数据
-                    var formdata=form.val("addWin");
-                    $.ajax({
-                        method:'post',
-                        url:'department/add',
-                        data:formdata,
-                        success:function(result){
-                            //关闭对话框
-                            layer.closeAll();
-                            //刷新数据
-                            table.reload("datalist");
-                            //提示用户
-                            layer.msg("添加成功",{icon:1,time:1800});
-                        }
-                    });
-
-                }
-            });
-
+        if(event=='check'){
+            var name = $("[name='name']").val();
+            var booktitle = $("[name='booktitle']").val();
+            table.reload('datalist',{where: {name:name,booktitle:booktitle}});
+            $("[name='name']").val(name);
+            $("[name='booktitle']").val(booktitle);
         }
     });
 
@@ -120,19 +110,39 @@
     table.on("tool(datalist)",function(obj){
         var event=obj.event;
         var data=obj.data;//点击按钮所在行的数据
-        if(event=='edit'){
-            //点击编辑按钮执行的方法
-            form.val("editWin",data);//显示原始数据
-            //打开对话框
-            layer.open({
-                type:1,
-                title:'编辑部门',
-                area:['300px','260px'],
-                content:$("#editWin"),
-                btn:["保存"],
-                btn1:function(){
-                    //获取表单数据
-                    var formdata=form.val("editWin");
+        if(event=='returned'){
+            // //点击编辑按钮执行的方法
+            // form.val("editWin",data);//显示原始数据
+            // //打开对话框
+            // layer.open({
+            //     type:1,
+            //     title:'编辑部门',
+            //     area:['300px','260px'],
+            //     content:$("#editWin"),
+            //     btn:["保存"],
+            //     btn1:function(){
+            //         //获取表单数据
+            //         var formdata=form.val("editWin");
+
+
+            layer.confirm("确认归还此书籍？",function(){
+                //提交数据
+                $.ajax({
+                    method:"post",
+                    url:"borrow/returned",
+                    data:{recordid:data.recordid},
+                    success:function(result){
+                        //刷新表格
+                        table.reload("datalist");
+                        //关闭窗口
+                        layer.closeAll();
+                        //提示用户
+                        layer.msg("保存成功",{icon:1,time:1800});
+                    }
+                });
+
+            });
+
                     //提交数据
                     $.ajax({
                         method:"post",
@@ -148,8 +158,8 @@
                         }
                     });
 
-                }
-            });
+            //     }
+            // });
         }else if(event=='delete'){
             //点击删除按钮执行的方法
             //确认是否删除数据
