@@ -27,16 +27,16 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
-                <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    贤心
+                <a href="javascript:;" _loginname>
+<!--                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">-->
+                    线芯
                 </a>
-                <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
-                </dl>
+<!--                <dl class="layui-nav-child">-->
+<!--                    <dd><a href="">基本资料</a></dd>-->
+<!--                    <dd><a href="">安全设置</a></dd>-->
+<!--                </dl>-->
             </li>
-            <li class="layui-nav-item"><a href="">退了</a></li>
+            <li class="layui-nav-item"><a href="javascript:;" _loginout>退出</a></li>
         </ul>
     </div>
 
@@ -80,11 +80,47 @@
 <script src="static/layui/layui.all.js"></script>
 <script>
     const $=layui.$;
+    const layer = layui.layer;
+
+    //如果没有登录，直接跳转到login.html
+    $.ajax({
+        url:"login/islogin",
+        async:false,
+        success:function(result){
+            if(!result){
+            //没有登录的状态
+                top.location.href="login.html";
+            }
+            //已经登陆的状态
+            else{
+                $("[_loginname]").text(result.adminname);
+            }
+        }
+    });
+
     $("[_url]").click(function(){
         //将标签中的_url属性代表的页面显示在主题区域
         var url=$(this).attr("_url");
         $("#main").attr("src",url);
     });
+
+    //退出功能
+    $("[_loginout]").click(function() {
+    layer.confirm("确认要退出吗？", function() {
+        // 用户点击确认后执行的代码
+        $.ajax({
+            url: 'login/loginout',
+            success: function() {
+                top.location.href = "login.html";
+            },
+            error: function() {
+                // 处理错误情况，例如显示错误消息
+                layer.alert("退出失败，请稍后再试。");
+            }
+        });
+    });
+});
+
 </script>
 </body>
 </html>

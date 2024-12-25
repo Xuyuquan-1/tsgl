@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录页面</title>
+    <link rel="stylesheet" href="static/layui/css/layui.css">
+</head>
+<body class="layui-layout-body" style="background-image:url(static/img/loginback.jpeg);background-repeat:no-repeat;background-size:cover;">
+
+<div class="layui-container" style="" >
+    <div class="layui-card" style="width: 500px; margin: 100px auto;">
+        <div class="layui-card-body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" type="button" lay-submit lay-filter="login">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="static/layui/layui.all.js"></script>
+<script>
+
+      var $=layui.$;
+      var form = layui.form;
+      var layer = layui.layer;
+
+      //如果已经登录不可以再访问到此页面
+      $.ajax({
+          url:'login/islogin',
+          async:false,
+          success:function(result){
+              if(result){
+              //说明已经登录过了
+              location.href="index.html";
+              }
+          }
+      });
+
+      // 提交表单的监听
+      form.on('submit(login)', function(data){
+        // 在这里处理登录逻辑
+        console.log(data.field); // 获取表单提交的字段
+        // 例如：提交到服务器处理
+        $.ajax({
+        url: '/login/dologin',
+        data: data.field,
+        type: 'post',
+        success: function(res){
+        if(res == 'success'){
+               // 登录成功
+               location.href = "index.html"
+             } else {
+              // 登录失败
+              layui.msg("登录失败",{icon:2});
+             }
+           }
+         });
+         //取消原有的登录过程
+        return false;
+      });
+
+</script>
+
+</body>
+</html>

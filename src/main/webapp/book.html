@@ -124,6 +124,17 @@
     const layer=layui.layer;
     const form=layui.form;
 
+    //
+    $.ajax({
+        url:"login/islogin",
+        async:false,
+        success:function(result){
+            if(!result){
+                top.location.href="login.html";
+            }
+        }
+    });
+
     //查询数据库中分类的信息  将分类信息转换成下拉框选项 设置到两个下拉框中
     $.ajax({
         url:'category/list',
