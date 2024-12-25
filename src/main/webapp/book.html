@@ -22,6 +22,26 @@
     </tr>
     </thead>
 </table>
+<!--借阅图书窗口组件-->
+<div id="borrowWin" lay-filter="borrowWin" class="layui-form" style="display: none">
+    <input type="hidden" name="bookid">
+    <div class="layui-form-item">
+        <label class="layui-form-label">书名</label>
+        <div class="layui-input-block">
+            <input type="text" name="booktitle" readonly placeholder="请输入图书名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">借阅人</label>
+        <div class="layui-input-block">
+            <select name="userid" lay-verify="required" lay-search="">
+                <option value="">直接选择或搜索选择</option>
+
+            </select>
+        </div>
+    </div>
+</div>
 <!--新增窗口组件-->
 <div id="addWin" lay-filter="addWin" class="layui-form" style="display: none">
     <div class="layui-form-item">
@@ -105,15 +125,28 @@
 </div>
 <!--表格头部工具栏-->
 <script type="text/html" id="toptools">
-    <button type="button" class="layui-btn layui-btn-sm"
-            lay-event="add">新增</button>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="text" name="checktext"  autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn"
+                    lay-event="check">查询</button>
+            <button type="button" class="layui-btn layui-btn"
+                    lay-event="add">新增</button>
+        </div>
+    </div>
+
 </script>
 <!--表格行内工具栏-->
 <script type="text/html" id="linetools">
     <button type="button" class="layui-btn layui-btn-xs layui-bg-orange"
+            lay-event="borrow">借阅</button>
+    <button type="button" class="layui-btn layui-btn-xs layui-bg-orange"
             lay-event="edit">编辑</button>
     <button type="button" class="layui-btn layui-btn-xs layui-bg-red"
             lay-event="delete">删除</button>
+
 </script>
 
 <script src="static/layui/layui.all.js"></script>
@@ -149,10 +182,31 @@
         }
     });
 
-    /*声明表格头部工具栏时间*/
+    $.ajax({
+        url:'user/list',
+        async:false,
+        success:function(result){
+            var data = result.data;
+            for(var index in data){
+                $("select[name='userid']").append(
+                    "<option value='"+data[index].userid+"'>" +"data[index].name+"</option>"
+                );
+
+            }
+        }
+    })
+
+    /*声明表格头部工具栏事件*/
     table.on("toolbar(datalist)",function(obj){
         var event=obj.event;
-        if(event=='add'){
+        if(event=='check'){
+            //点击查询按钮执行的方法
+            var checktext=$("[name='checktext']").val();
+            table.reload("datalist",{where:{checktext:checktext}});
+            //回写
+            $("[name='checktext']").val(checktext);
+        }
+        else if(event=='add'){
             //点击新增按钮执行的方法
             form.val("addWin",{booktitle:'',author:'',publisheddate:'',categoryid:'',pages:'',price:''});
             //打开一个对话框(输入内容)
@@ -190,6 +244,31 @@
     table.on("tool(datalist)",function(obj){
         var event=obj.event;
         var data=obj.data;//点击按钮所在行的数据
+        if(event=='borrow'){
+            //点击借阅按钮执行的方法
+            form.val("borrowWin",data);
+            layer.open({
+                type:1,
+                title:"借阅"，
+                area:['400px','470px'],
+                content:$("#borrowWin"),
+                btn:["保存"],
+                btn1:function(){
+                    var formdata = form.val("borrowWin");
+                    $.agax({
+                        url:"borrow/borrow",
+                        data:formdata,
+                        success:function(){
+                            //关闭窗口
+                            layer.closeAll();
+                            //提示用户
+                            layer.msg("借阅成功",{icon:1,time:1800});
+                        }
+                    });
+                }
+            });
+        }
+        else
         if(event=='edit'){
             //点击编辑按钮执行的方法
             form.val("editWin",data);//显示原始数据
