@@ -5,6 +5,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class JdbcUtil {
@@ -136,6 +137,19 @@ public class JdbcUtil {
         return list;
     }
 
+
+    public static List convertToHashMap(ResultSet rs) throws SQLException {
+        List result = new ArrayList();
+
+        //获取查询结果集中列的数量
+        ResultSetMetaData mateData = rs.getMetaData();
+        int colcount = rs.getMetaData().getColumnCount();
+        while(rs.next()){
+            for(int i = 1; i <= colcount; i++){
+                String columnName = mateData.getColumnName(i).toLowerCase();
+            }
+        }
+    }
     /**
      * 将下划线分隔的字符串转换为驼峰命名法。
      *

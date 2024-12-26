@@ -2,12 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>图表分析</title>
+    <style>
+        html,body{
+            height: 98%;
+        }
+
+
+        .box{
+            width: 100%;
+            height: 100%;
+        }
+
+        .item{
+            width: 50%;
+            height: 50%;
+            float: left;
+        }
+
+        .box:after{
+            clear:both;
+            display: block;
+            context:'';
+        }
+    </style>
 </head>
 <body>
+<div class="box">
+    <div id="itema" class="item"></div>
+    <div id="itemb" class="item"></div>
+    <div id="itemc" class="item"></div>
+    <div id="itemd" class="item"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script>
+// 基于准备好的dom，初始化echarts实例
+var myChartA = echarts.init(document.getElementById('itema'));
 
+// 指定图表的配置项和数据
+var optionA = {
+title: {
+text: '分类借阅数量'
+},
+tooltip: {},
+legend: {
+data: ['借阅数量']
+},
+xAxis: {
+data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+},
+yAxis: {},
+series: [
+{
+name: '借阅数量',
+type: 'bar',
+data: [50, 20, 36, 10, 10, 20]
+}
+]
+};
+
+// 使用刚指定的配置项和数据显示图表。
+myChartA.setOption(optionA);
+</script>
 </body>
 </html>
