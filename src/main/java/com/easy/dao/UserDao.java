@@ -1,5 +1,6 @@
 package com.easy.dao;
 
+import com.easy.bean.Book;
 import com.easy.bean.User;
 import com.easy.util.JdbcUtil;
 import com.easy.util.Page;
@@ -14,9 +15,10 @@ import java.util.List;
 public class UserDao {
 
     public User getUserByUserId(int userid) throws SQLException, IllegalAccessException, InstantiationException {
-        String sql = "select * from user where userid = ?";
+        String sql = "select * from user where userid=? ";
         ResultSet rs = JdbcUtil.query(sql, userid);
         List<User> list=JdbcUtil.convertResultSetToList(rs,User.class);
+
         User result=list.get(0);
         JdbcUtil.close(rs);
         return result;
@@ -28,6 +30,7 @@ public class UserDao {
         if(checktext!=null){
             sql+=" where name like ?";
             params.add("%"+checktext+"%");
+
         }
         if(page!=null){
             sql+="limit ?,?";

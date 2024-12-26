@@ -17,6 +17,10 @@ public class BookDao {
         String sql = "select * from book where bookid=?";
         ResultSet rs = JdbcUtil.query(sql, bookid);
         List<Book> list=JdbcUtil.convertResultSetToList(rs,Book.class);
+//        if(list.size()==0) {
+//            return new Book();
+//        }
+
         Book result=list.get(0);
         JdbcUtil.close(rs);
         return result;
@@ -29,6 +33,14 @@ public class BookDao {
             sql+=" where booktitle like ?";
             params.add("%"+checktext+"%");
         }
+
+        if(sql.contains("where")){
+            sql = sql + " and isdelete=0 ";
+        }
+        else{
+            sql = sql + " where isdelete=0 ";
+        }
+
         if(page!=null){
             sql+=" limit ?,? ";
             params.add(page.getStart());
@@ -45,9 +57,9 @@ public class BookDao {
 
     //查询表中一共有多少数据
     public int getCount(String checktext) throws SQLException {
-        String sql="select count(*) from book ";
+        String sql="select count(*) from book where isdelete=0 ";
         if(checktext!=null){
-            sql+=" where booktitle like ?";
+            sql+=" and booktitle like ?";
             ResultSet rs=JdbcUtil.query(sql,"%"+checktext+"%");
             rs.next();
             int result = rs.getInt(1);
@@ -75,9 +87,10 @@ public class BookDao {
         return result;
     }
 
-    //删除
+    //软删除   用状态来记录时间是否被删除   isdelete    0未删除   1已删除
     public int delete(Book book){
-        String sql="delete from book where bookid=?";
+//        String sql="delete from book where bookid=?";
+        String sql = "update book set isdelete=1 where bookid=?";
         int result=JdbcUtil.update(sql,book.getBookid());
         return result;
     }

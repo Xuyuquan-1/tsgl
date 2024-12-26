@@ -13,8 +13,18 @@ public class Book {
     private int categoryid;
     private int pages;
     private double price;
+    private int isdelete;
 
     //存储分类信息
+
+    public int getIsdelete() {
+        return isdelete;
+    }
+
+    public void setIsdelete(int isdelete) {
+        this.isdelete = isdelete;
+    }
+
     private BookCategory category;
 
     public BookCategory getCategory() {
