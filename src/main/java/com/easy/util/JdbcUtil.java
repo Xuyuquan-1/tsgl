@@ -138,17 +138,23 @@ public class JdbcUtil {
     }
 
 
-    public static List convertToHashMap(ResultSet rs) throws SQLException {
-        List result = new ArrayList();
+    public static List<HashMap> convertToHashMap(ResultSet rs) throws SQLException {
+        List<HashMap> result = new ArrayList();
 
         //获取查询结果集中列的数量
         ResultSetMetaData mateData = rs.getMetaData();
         int colcount = rs.getMetaData().getColumnCount();
         while(rs.next()){
+            HashMap item = new HashMap();
             for(int i = 1; i <= colcount; i++){
-                String columnName = mateData.getColumnName(i).toLowerCase();
+                //列名
+                String colName = mateData.getColumnName(i+1);
+                Object colVal = rs.getObject(colName);
+                item.put(colName, colVal);
             }
+            result.add(item);
         }
+        return result;
     }
     /**
      * 将下划线分隔的字符串转换为驼峰命名法。
